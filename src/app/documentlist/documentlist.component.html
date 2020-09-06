@@ -1,0 +1,109 @@
+<adf-toolbar>
+
+  <adf-userinfo
+    class="adf-app-layout-user-profile"
+    [menuPositionX]="'before'"
+    [menuPositionY]="'above'">
+  </adf-userinfo>
+
+  <a mat-list-item adf-logout class="adf-sidenav-link">
+    <h1> Déconnexion</h1>
+    <mat-icon matListIcon class="sidenav-menu-icon">exit_to_app</mat-icon>
+  </a>
+</adf-toolbar>
+<img src="assets/Picosoft.PNG" Height="10%" width="10%" alt=""/>
+<div *ngIf="myroot">
+  <adf-toolbar>
+    <adf-toolbar-title>
+      <adf-dropdown-breadcrumb
+        *ngIf="myroot"
+        [target]="documentList"
+        [folderNode]="documentList.folderNode">
+      </adf-dropdown-breadcrumb>
+    </adf-toolbar-title>
+  </adf-toolbar>
+
+  <adf-document-list
+    #documentList
+    [allowDropFiles]="true"
+    [currentFolderId]="myroot"
+    (preview)="showPreview($event)"
+    (folderChange)="onFolderChange($event)"
+  >
+    <data-columns>
+      <data-column
+        key="$thumbnail"
+        type="image"
+        [sortable]="false"
+        class="image-table-cell">
+      </data-column>
+      <data-column
+        key="name"
+        title="{{'Nom' | translate}}"
+        [formatTooltip]="getNodeNameTooltip"
+        class="full-width ellipsis-cell">
+      </data-column>
+      <data-column
+        key="path"
+        type="location"
+        format="/files"
+        title="Location">
+      </data-column>
+      <data-column
+        title="{{'Créer par' | translate}}"
+        key="createdByUser.displayName"
+        class="desktop-only">
+      </data-column>
+    </data-columns>
+  </adf-document-list>
+
+  <adf-viewer
+    #viewpdf
+    [(showViewer)]="showViewer"
+    [overlayMode]="true"
+    [fileNodeId]="nodeId"
+    (goBack)="onGoBack($event)"
+    [allowSidebar]="true"
+    [sidebarTemplate]="sidebarTemplate"
+    [allowThumbnails]="true"
+  >
+
+    <ng-template let-node="node" #sidebarTemplate>
+      <adf-info-drawer [title]="'Champs des indexes '">
+
+        <adf-info-drawer-tab [label]="'1ére étape'">
+          <form #f="ngForm" (ngSubmit)="addindex(f.value)">
+            <table class="example-full-width" cellspacing="0">
+
+              <adf-content-metadata-card
+                [node]="node"
+                [displayEmpty]="false"
+                [preset]="'*'"
+              >
+              </adf-content-metadata-card>
+
+
+            </table>
+          </form>
+
+        </adf-info-drawer-tab>
+
+
+        <adf-info-drawer-tab [label]="'2éme étape '">
+          <button mat-raised-button (click)="move()" color="accent">Classer</button>
+        </adf-info-drawer-tab>
+      </adf-info-drawer>
+
+
+    </ng-template>
+  </adf-viewer>
+</div>
+
+<!--<adf-pdf-viewer-->
+<!--#viewPdf-->
+<!--[allowThumbnails]="true"-->
+<!--[urlFile]=" 'http://localhost:4200/alfresco/api/-default-/public/alfresco/versions/1/nodes/17a40f52-8046-4f08-a315-014b15fb11e9/content?attachment=false&alf_ticket=TICKET_58e80b3f224576ee101d2f8862533fca1af25506'"-->
+<!--&gt;</adf-pdf-viewer>-->
+
+
+
